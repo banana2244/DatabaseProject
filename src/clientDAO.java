@@ -101,6 +101,210 @@ public class clientDAO {
         disconnect();
         return valid;
     }
+    
+    public boolean insertClientRequest(ClientRequest request) {
+        boolean insertSuccess = false;
+        PreparedStatement pstmt = null;
+
+        try {
+            connect_func();  // Connect to the database
+            
+            // Include the ready column and set it to false by default
+            String sql = "INSERT INTO client_requests (clientName, clientEmail, requestDetails, ready) VALUES (?, ?, ?, ?)";
+            pstmt = connect.prepareStatement(sql);
+            pstmt.setString(1, request.getClientName());
+            pstmt.setString(2, request.getClientEmail());
+            pstmt.setString(3, request.getRequestDetails());
+            pstmt.setBoolean(4, false); // Set ready to false
+            
+            int affectedRows = pstmt.executeUpdate();
+            insertSuccess = affectedRows > 0;
+            
+        } catch (SQLException e) {
+            // Log the exception
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connect != null) connect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return insertSuccess;
+    }
+
+    
+    
+    public boolean updateClientRequestResponse(int requestId, String response) {
+        boolean updateSuccess = false;
+        PreparedStatement pstmt = null;
+
+        try {
+            connect_func();  // Connect to the database
+            
+            String sql = "UPDATE client_requests SET response = ?, ready = NOT ready WHERE id = ?";
+            pstmt = connect.prepareStatement(sql);
+            pstmt.setString(1, response);
+            pstmt.setInt(2, requestId);
+            
+            int affectedRows = pstmt.executeUpdate();
+            updateSuccess = affectedRows > 0;
+            
+        } catch (SQLException e) {
+            // Log the exception
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connect != null) connect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return updateSuccess;
+    }
+
+    
+    
+    public boolean updateClientRequestAccepted(int requestId, Boolean accepted) {
+        boolean updateSuccess = false;
+        PreparedStatement pstmt = null;
+
+        try {
+            connect_func();  // Connect to the database
+
+            String sql = "UPDATE client_requests SET accepted = ? WHERE id = ?";
+            pstmt = connect.prepareStatement(sql);
+            if (accepted == null) {
+                pstmt.setNull(1, Types.BOOLEAN); // Set null if accepted is null
+            } else {
+                pstmt.setBoolean(1, accepted);
+            }
+            pstmt.setInt(2, requestId);
+
+            int affectedRows = pstmt.executeUpdate();
+            updateSuccess = affectedRows > 0;
+
+        } catch (SQLException e) {
+            // Log the exception
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            try {
+                if (pstmt != null) pstmt.close();
+                if (connect != null) connect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return updateSuccess;
+    }
+
+    
+    
+    public List<ClientRequest> getAllClientRequests() throws SQLException {
+        List<ClientRequest> listClientRequests = new ArrayList<ClientRequest>();
+        String sql = "SELECT id, clientName, clientEmail, requestDetails, response, ready, accepted FROM client_requests";
+        
+        connect_func(); // Connect to the database
+        statement = connect.createStatement();
+        resultSet = statement.executeQuery(sql);
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String clientName = resultSet.getString("clientName");
+            String clientEmail = resultSet.getString("clientEmail");
+            String requestDetails = resultSet.getString("requestDetails");
+            String response = resultSet.getString("response"); 
+            boolean readyPrimitive = resultSet.getBoolean("ready");
+            Boolean ready = resultSet.wasNull() ? null : readyPrimitive;
+            boolean acceptedPrimitive = resultSet.getBoolean("accepted");
+            Boolean accepted = resultSet.wasNull() ? null : acceptedPrimitive;
+
+            
+            ClientRequest request = new ClientRequest(id, clientName, clientEmail, requestDetails, response, ready, accepted);
+
+            listClientRequests.add(request);
+        }
+
+        resultSet.close();
+        disconnect(); // Disconnect from the database
+        
+        return listClientRequests;
+    }
+    
+    
+    
+    public Client getClientByEmail(String email) throws SQLException {
+        Client client = null;
+        String sql = "SELECT * FROM Clients WHERE Email = ?";
+        
+        connect_func();
+        
+        preparedStatement = connect.prepareStatement(sql);
+        preparedStatement.setString(1, email);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        if (resultSet.next()) {
+            int clientID = resultSet.getInt("ClientID");
+            String firstName = resultSet.getString("FirstName");
+            String lastName = resultSet.getString("LastName");
+            String address = resultSet.getString("Address");
+            String phoneNumber = resultSet.getString("PhoneNumber");
+            String creditCardInfo = resultSet.getString("CreditCardInfo");
+            String password = resultSet.getString("Password");
+            // Create a new Client object using the retrieved data
+            client = new Client(clientID, email, firstName, lastName, address, phoneNumber, creditCardInfo, password);
+        }
+        
+        resultSet.close();
+        preparedStatement.close();
+        disconnect();
+        
+        return client;
+    }
+    
+    
+    
+
+    public List<ClientRequest> getClientRequestsByEmail(String email) throws SQLException {
+        List<ClientRequest> listClientRequests = new ArrayList<>();
+        String sql = "SELECT * FROM client_requests WHERE clientEmail = ?";
+        
+        connect_func();
+        preparedStatement = connect.prepareStatement(sql);
+        preparedStatement.setString(1, email);
+        resultSet = preparedStatement.executeQuery();
+        
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            String clientName = resultSet.getString("clientName");
+            String clientEmail = resultSet.getString("clientEmail");
+            String requestDetails = resultSet.getString("requestDetails");
+            String response = resultSet.getString("response");
+            boolean readyPrimitive = resultSet.getBoolean("ready");
+            Boolean ready = resultSet.wasNull() ? null : readyPrimitive;
+            boolean acceptedPrimitive = resultSet.getBoolean("accepted");
+            Boolean accepted = resultSet.wasNull() ? null : acceptedPrimitive;
+            
+            ClientRequest request = new ClientRequest(id, clientName, clientEmail, requestDetails, response, ready, accepted);
+            listClientRequests.add(request);
+        }
+        
+        resultSet.close();
+        preparedStatement.close();
+        disconnect();
+        
+        return listClientRequests;
+    }
+
+
 
     
     public void init() throws SQLException, FileNotFoundException, IOException{
@@ -137,7 +341,17 @@ public class clientDAO {
                 "Picture3 VARCHAR(255)," +
                 "FOREIGN KEY (ClientID) REFERENCES Clients(ClientID)" +
                 ");",
-
+                
+                "CREATE TABLE IF NOT EXISTS client_requests (" +
+                        "id INT AUTO_INCREMENT PRIMARY KEY," +
+                        "clientName VARCHAR(255) NOT NULL," +
+                        "clientEmail VARCHAR(255) NOT NULL," +
+                        "requestDetails TEXT," +
+                        "response TEXT," +
+                        "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                        "ready BOOLEAN," +
+                        "accepted BOOLEAN" +
+                        ");",
 
                 // Admin Table
                 "CREATE TABLE if not exists Admin (" +

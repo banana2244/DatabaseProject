@@ -8,5 +8,6 @@
 </head>
 <body>
 <h1>Welcome David... This is your homepage!</h1>
+    <a href="quoteManagement">Manage Quotes</a>
 </body>
 </html>
