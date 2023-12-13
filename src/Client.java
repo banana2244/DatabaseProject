@@ -7,9 +7,22 @@ public class Client {
     protected String phoneNumber;
     protected String creditCardInfo; 
     protected String password;
+    protected int numTrees;
 
     // Constructors
     public Client() {
+    }
+
+    public Client(int clientID, String email, String firstName, String lastName, String address, String phoneNumber, String creditCardInfo, String password, int numTrees) {
+        this.clientID = clientID;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.creditCardInfo = creditCardInfo;
+        this.password = password;
+        this.numTrees = numTrees;
     }
 
     public Client(int clientID, String email, String firstName, String lastName, String address, String phoneNumber, String creditCardInfo, String password) {
@@ -21,6 +34,7 @@ public class Client {
         this.phoneNumber = phoneNumber;
         this.creditCardInfo = creditCardInfo;
         this.password = password;
+        this.numTrees = 0;
     }
 
     // Getter and Setter methods
@@ -87,4 +101,11 @@ public class Client {
         return password;
     }
 
+    public int getNumTrees() {
+        return numTrees;
+    }
+
+    public void setNumTrees(int numTrees) {
+        this.numTrees = numTrees;
+    }
 }

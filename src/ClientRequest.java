@@ -6,6 +6,7 @@ public class ClientRequest {
     private String response; // This will hold the response to the request
     private Boolean ready;
     private Boolean accepted;
+    // private Tree tree;
 
     // Constructor with all fields
     public ClientRequest(int id, String clientName, String clientEmail, String requestDetails, String response, Boolean ready, Boolean accepted) {
@@ -21,6 +22,7 @@ public class ClientRequest {
     public Boolean getReady() {
     	return ready;
     }
+    
     public void setReady(Boolean ready) {
     	this.ready = ready;
     }
@@ -83,6 +85,14 @@ public class ClientRequest {
     // Optionally, include an empty constructor if needed for framework or other purposes
     public ClientRequest() {
     }
+
+	// public Tree getTree() {
+	// 	return tree;
+	// }
+
+	// public void setTree(Tree tree) {
+	// 	this.tree = tree;
+	// }
 
     // Additional methods and logic...
 }

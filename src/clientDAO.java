@@ -304,6 +304,61 @@ public class clientDAO {
         return listClientRequests;
     }
 
+    // public List<Tree> getAllTrees() throws SQLException {
+    //     List<Tree> listTree = new ArrayList<Tree>();
+    //     String sql = "SELECT * FROM Trees";
+    //     connect_func();
+    //     statement = connect.createStatement();
+    //     resultSet = statement.executeQuery(sql);
+
+    //     while (resultSet.next()) {
+    //         int treeID = resultSet.getInt("TreeID");
+    //         int clientID = resultSet.getInt("ClientID");
+    //         int size = resultSet.getInt("Size");
+    //         int height = resultSet.getInt("Height");
+    //         String location = resultSet.getString("Location");
+    //         String proximityToHouse = resultSet.getString("ProximityToHouse");
+    //         String picture1 = resultSet.getString("Picture1");
+    //         String picture2 = resultSet.getString("Picture2");
+    //         String picture3 = resultSet.getString("Picture3");
+
+    //         Tree tree = new Tree(treeID, clientID, size, height, location, proximityToHouse, picture1, picture2, picture3);
+    //         listTree.add(tree);
+    //     }
+
+    //     resultSet.close();
+    //     disconnect();
+    //     return listTree;
+    // }
+
+    // public List<Client> getBigClients() throws SQLException {
+    //     List<Client> listClient = new ArrayList<Client>();
+    //     //top client is the one with the most trees
+    //     String sql = "SELECT * FROM Clients ORDER BY NumTrees DESC LIMIT 1";
+    //     connect_func();
+    //     statement = connect.createStatement();
+    //     resultSet = statement.executeQuery(sql);
+
+    //     while (resultSet.next()) {
+    //         int clientID = resultSet.getInt("ClientID");
+    //         String firstName = resultSet.getString("FirstName");
+    //         String lastName = resultSet.getString("LastName");
+    //         String address = resultSet.getString("Address");
+    //         String email = resultSet.getString("Email");
+    //         String creditCardInfo = resultSet.getString("CreditCardInfo");
+    //         String phoneNumber = resultSet.getString("PhoneNumber");
+    //         String password = resultSet.getString("Password");
+    //         int numTrees = resultSet.getInt("NumTrees");
+
+    //         Client client = new Client(clientID, email, firstName, lastName, address, phoneNumber, creditCardInfo, password , numTrees);
+    //         listClient.add(client);
+    //     }
+
+    //     resultSet.close();
+    //     disconnect();
+    //     return listClient;
+    // }
+
 
 
     
@@ -325,15 +380,16 @@ public class clientDAO {
                 "CreditCardInfo VARCHAR(255)," +
                 "PhoneNumber VARCHAR(15) NOT NULL," +
                 "Email VARCHAR(100) NOT NULL UNIQUE," +
-                "Password VARCHAR(255) NOT NULL" +
+                "Password VARCHAR(255) NOT NULL," +
+                "NumTrees INT NOT NULL DEFAULT 0" +
                 ");",
 
                 // Trees Table
                 "CREATE TABLE if not exists Trees (" +
                 "TreeID INT AUTO_INCREMENT PRIMARY KEY," +
                 "ClientID INT," +
-                "Size DECIMAL(5,2) NOT NULL," +
-                "Height DECIMAL(5,2) NOT NULL," +
+                "Size INT NOT NULL," +
+                "Height INT NOT NULL," +
                 "Location VARCHAR(255) NOT NULL," +
                 "ProximityToHouse VARCHAR(255) NOT NULL," +
                 "Picture1 VARCHAR(255)," +
@@ -346,11 +402,17 @@ public class clientDAO {
                         "id INT AUTO_INCREMENT PRIMARY KEY," +
                         "clientName VARCHAR(255) NOT NULL," +
                         "clientEmail VARCHAR(255) NOT NULL," +
-                        "requestDetails TEXT," +
+                        "requestDetails INT," +
+                        "FOREIGN KEY (requestDetails) REFERENCES TREE(TreeID)," +
                         "response TEXT," +
                         "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
                         "ready BOOLEAN," +
-                        "accepted BOOLEAN" +
+                        "accepted BOOLEAN," +
+                        "paid BOOLEAN," +
+                        "easy BOOLEAN," +
+                        "paidAt TIMESTAMP," +
+                        "completed BOOLEAN," +
+                        "FOREIGN KEY (clientEmail) REFERENCES Clients(Email)"+
                         ");",
 
                 // Admin Table
