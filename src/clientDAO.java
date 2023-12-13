@@ -304,60 +304,60 @@ public class clientDAO {
         return listClientRequests;
     }
 
-    // public List<Tree> getAllTrees() throws SQLException {
-    //     List<Tree> listTree = new ArrayList<Tree>();
-    //     String sql = "SELECT * FROM Trees";
-    //     connect_func();
-    //     statement = connect.createStatement();
-    //     resultSet = statement.executeQuery(sql);
+    public List<Tree> getAllTrees() throws SQLException {
+        List<Tree> listTree = new ArrayList<Tree>();
+        String sql = "SELECT * FROM Trees";
+        connect_func();
+        statement = connect.createStatement();
+        resultSet = statement.executeQuery(sql);
 
-    //     while (resultSet.next()) {
-    //         int treeID = resultSet.getInt("TreeID");
-    //         int clientID = resultSet.getInt("ClientID");
-    //         int size = resultSet.getInt("Size");
-    //         int height = resultSet.getInt("Height");
-    //         String location = resultSet.getString("Location");
-    //         String proximityToHouse = resultSet.getString("ProximityToHouse");
-    //         String picture1 = resultSet.getString("Picture1");
-    //         String picture2 = resultSet.getString("Picture2");
-    //         String picture3 = resultSet.getString("Picture3");
+        while (resultSet.next()) {
+            int treeID = resultSet.getInt("TreeID");
+            int clientID = resultSet.getInt("ClientID");
+            int size = resultSet.getInt("Size");
+            int height = resultSet.getInt("Height");
+            String location = resultSet.getString("Location");
+            String proximityToHouse = resultSet.getString("ProximityToHouse");
+            String picture1 = resultSet.getString("Picture1");
+            String picture2 = resultSet.getString("Picture2");
+            String picture3 = resultSet.getString("Picture3");
 
-    //         Tree tree = new Tree(treeID, clientID, size, height, location, proximityToHouse, picture1, picture2, picture3);
-    //         listTree.add(tree);
-    //     }
+            Tree tree = new Tree(treeID, clientID, size, height, location, proximityToHouse, picture1, picture2, picture3);
+            listTree.add(tree);
+        }
 
-    //     resultSet.close();
-    //     disconnect();
-    //     return listTree;
-    // }
+        resultSet.close();
+        disconnect();
+        return listTree;
+    }
 
-    // public List<Client> getBigClients() throws SQLException {
-    //     List<Client> listClient = new ArrayList<Client>();
-    //     //top client is the one with the most trees
-    //     String sql = "SELECT * FROM Clients ORDER BY NumTrees DESC LIMIT 1";
-    //     connect_func();
-    //     statement = connect.createStatement();
-    //     resultSet = statement.executeQuery(sql);
+    public List<Client> getBigClients() throws SQLException {
+        List<Client> listClient = new ArrayList<Client>();
+        //top client is the one with the most trees
+        String sql = "SELECT * FROM Clients ORDER BY NumTrees DESC LIMIT 1";
+        connect_func();
+        statement = connect.createStatement();
+        resultSet = statement.executeQuery(sql);
 
-    //     while (resultSet.next()) {
-    //         int clientID = resultSet.getInt("ClientID");
-    //         String firstName = resultSet.getString("FirstName");
-    //         String lastName = resultSet.getString("LastName");
-    //         String address = resultSet.getString("Address");
-    //         String email = resultSet.getString("Email");
-    //         String creditCardInfo = resultSet.getString("CreditCardInfo");
-    //         String phoneNumber = resultSet.getString("PhoneNumber");
-    //         String password = resultSet.getString("Password");
-    //         int numTrees = resultSet.getInt("NumTrees");
+        while (resultSet.next()) {
+            int clientID = resultSet.getInt("ClientID");
+            String firstName = resultSet.getString("FirstName");
+            String lastName = resultSet.getString("LastName");
+            String address = resultSet.getString("Address");
+            String email = resultSet.getString("Email");
+            String creditCardInfo = resultSet.getString("CreditCardInfo");
+            String phoneNumber = resultSet.getString("PhoneNumber");
+            String password = resultSet.getString("Password");
+            int numTrees = resultSet.getInt("NumTrees");
 
-    //         Client client = new Client(clientID, email, firstName, lastName, address, phoneNumber, creditCardInfo, password , numTrees);
-    //         listClient.add(client);
-    //     }
+            Client client = new Client(clientID, email, firstName, lastName, address, phoneNumber, creditCardInfo, password , numTrees);
+            listClient.add(client);
+        }
 
-    //     resultSet.close();
-    //     disconnect();
-    //     return listClient;
-    // }
+        resultSet.close();
+        disconnect();
+        return listClient;
+    }
 
 
 
